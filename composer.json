@@ -15,8 +15,7 @@
 		{
 			"name": "Tijs Verkoyen",
 			"email": "php-docdatapayments@verkoyen.eu",
-			"role": "Original author",
-      "website": "https://github.com/tijsverkoyen"
+			"role": "Original author"
 		}
 	],
 	"require": {
