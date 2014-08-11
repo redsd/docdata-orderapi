@@ -26,7 +26,7 @@ class ApiClient
     /**
      * @var LoggerInterface
      */
-    public $logger;
+    private $logger;
 
     /**
      * The timeout
@@ -93,6 +93,8 @@ class ApiClient
         'vat'                     => '\CL\DocData\Component\OrderApi\Type\Vat',
         'visaPaymentInfo'         => '\CL\DocData\Component\OrderApi\Type\VisaPaymentInfo',
     ];
+
+    private $test = false;
 
     /**
      * @param string          $merchantName
