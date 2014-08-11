@@ -4,8 +4,6 @@ namespace CL\DocData\Component\OrderApi\Tests;
 
 use CL\DocData\Component\OrderApi\ApiClient;
 use CL\DocData\Component\OrderApi\Type;
-use Psr\Log\NullLogger;
-use Symfony\Component\Console\Logger\ConsoleLogger;
 
 class ApiClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,7 +14,7 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->apiClient = new ApiClient('foo', 'bar', true, new NullLogger());
+        $this->apiClient = new ApiClient('foo', 'bar', true);
     }
 
     public function testGetTimeOut()

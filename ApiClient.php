@@ -106,10 +106,8 @@ class ApiClient
         $this->merchant->setName($merchantName);
         $this->merchant->setPassword($merchantPassword);
 
-        $this->merchantName     = $merchantName;
-        $this->merchantPassword = $merchantPassword;
-        $this->test             = $test;
-        $this->logger           = $logger ? : new NullLogger();
+        $this->test   = $test;
+        $this->logger = $logger ? : new NullLogger();
     }
 
     /**
