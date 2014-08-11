@@ -25,7 +25,6 @@
   "require-dev": {
     "phpunit/phpunit": "~4.1"
   },
-  "target-dir": "CL/DocData/Component/OrderApi",
   "autoload": {
     "psr-0": {
       "CL\\DocData\\Component\\OrderApi": ""
