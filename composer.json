@@ -1,0 +1,26 @@
+{
+	"name": "cleentfaar/docdata-orders",
+	"type": "library",
+	"description": "The Order API component for the DocData library. Adaption of the 'Docdata Payments'-wrappers by Tijs Verkoyen.",
+	"license": "MIT",
+	"authors": [
+    {
+      "name": "Cas Leentfaar",
+      "email": "info@casleentfaar.com",
+      "role": "Developer"
+    },
+		{
+			"name": "Tijs Verkoyen",
+			"email": "php-docdatapayments@verkoyen.eu",
+			"role": "Original author",
+      "website": "https://github.com/tijsverkoyen"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0"
+	},
+	"target-dir": "CL/DocData/Component/OrderApi",
+	"autoload": {
+		"psr-0": {"CL\\DocData\\Component\\OrderApi": ""}
+	}
+}
