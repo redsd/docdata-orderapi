@@ -22,7 +22,7 @@ The Order API component for the DocData library.
 
 This component lets you create orders and track their status through DocData's Order API.
 
-The current supported API version is `1.2`.
+The current supported API version is `1.1`.
 
 
 ## License
