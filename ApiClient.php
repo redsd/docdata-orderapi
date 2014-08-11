@@ -232,8 +232,7 @@ class ApiClient
         Type\PaymentRequest $paymentRequest = null,
         Type\Invoice $invoice = null,
         $includeCosts = null
-    )
-    {
+    ) {
         $request = new Type\CreateRequest();
         $request->setMerchant($this->merchant);
         $request->setMerchantOrderReference($merchantOrderReference);
@@ -356,8 +355,7 @@ class ApiClient
         $finalCapture = null,
         $cancelReserved = null,
         $requiredCaptureDate = null
-    )
-    {
+    ) {
         $request = new Type\CaptureRequest();
         $request->setMerchant($this->merchant);
         $request->setPaymentId($paymentId);
@@ -434,8 +432,7 @@ class ApiClient
         $cancelReserved = null,
         $requiredRefundDate = null,
         Type\SepaBankAccount $refundBankAccount = null
-    )
-    {
+    ) {
         $request = new Type\RefundRequest();
         $request->setMerchant($this->merchant);
         $request->setPaymentId($paymentId);
@@ -511,7 +508,9 @@ class ApiClient
      *
      * @param string $paymentOrderKey
      *
-     * @return Soap
+     * @return mixed
+     *
+     * @throws \Exception
      */
     public function statusReponse($paymentOrderKey)
     {
@@ -573,8 +572,7 @@ class ApiClient
         $defaultPaymentMethod = null,
         $defaultAct = null,
         $production = true
-    )
-    {
+    ) {
         $parameters                        = [];
         $parameters['command']             = 'show_payment_cluster';
         $parameters['merchant_name']       = $this->merchant->getName();
@@ -639,8 +637,7 @@ class ApiClient
         $defaultPaymentMethod = null,
         $defaultAct = null,
         $production = true
-    )
-    {
+    ) {
         // get the url
         $url = $this->getPaymentUrl(
             $clientLanguage,
