@@ -29,6 +29,9 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('testing/1.1.0', $this->apiClient->getUserAgent());
     }
 
+    /**
+     * @group functional
+     */
     public function testCreate()
     {
         $name = new Type\Name();
@@ -74,6 +77,9 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Type\CreateSuccess', $response);
     }
 
+    /**
+     * @group functional
+     */
     public function testCancel()
     {
         $name = new Type\Name();
@@ -122,6 +128,9 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('SUCCESS', $response->getSuccess()->getCode());
     }
 
+    /**
+     * @group functional
+     */
     public function testCapture()
     {
         $this->markTestSkipped('we can\'t test this without using a fixed payment id, so alter the id below');
@@ -131,6 +140,9 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('SUCCESS', $response->getSuccess()->getCode());
     }
 
+    /**
+     * @group functional
+     */
     public function testRefund()
     {
         $this->markTestSkipped('we can\'t test this without using a fixed payment id, so alter the id below');
@@ -140,6 +152,9 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('SUCCESS', $response->getSuccess()->getCode());
     }
 
+    /**
+     * @group functional
+     */
     public function testStatus()
     {
         $name = new Type\Name();
@@ -188,6 +203,9 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('SUCCESS', $response->getSuccess()->getCode());
     }
 
+    /**
+     * @group functional
+     */
     public function testStatusNotPaid()
     {
         $name = new Type\Name();
@@ -235,6 +253,9 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Type\PaidLevel::NotPaid, $paidLevel);
     }
 
+    /**
+     * @group functional
+     */
     public function testStatusPaid()
     {
         $this->markTestSkipped('we can\'t test this without a manually docdata transaction, that has been paid.');
