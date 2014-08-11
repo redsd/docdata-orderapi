@@ -2,7 +2,10 @@
 	"name": "cleentfaar/docdata-orderapi",
 	"type": "library",
 	"description": "The Order API component for the DocData library. Adaption of the 'Docdata Payments'-wrappers by Tijs Verkoyen.",
-	"license": "MIT",
+	"license": [
+    "MIT",
+    "BSD"
+  ],
 	"authors": [
     {
       "name": "Cas Leentfaar",
