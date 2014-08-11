@@ -39,7 +39,7 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
         $shopper->setId(1);
         $shopper->setGender('M');
         $shopper->setName($name);
-        $shopper->setEmail('php-docdatapayments@verkoyen.eu');
+        $shopper->setEmail('john@doe.com');
         $shopper->setLanguage(new Type\Language('nl'));
 
         $totalGrossAmount = new Type\Amount(2000);
@@ -84,7 +84,7 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
         $shopper->setId(1);
         $shopper->setGender('M');
         $shopper->setName($name);
-        $shopper->setEmail('php-docdatapayments@verkoyen.eu');
+        $shopper->setEmail('john@doe.com');
         $shopper->setLanguage(new Type\Language('nl'));
 
         $totalGrossAmount = new Type\Amount(2000);
@@ -143,23 +143,23 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
     public function testStatus()
     {
         $name = new Type\Name();
-        $name->setFirst('Tijs');
-        $name->setLast('Verkoyen');
+        $name->setFirst('John');
+        $name->setLast('Doe');
 
         $shopper = new Type\Shopper();
         $shopper->setId(1);
         $shopper->setGender('M');
         $shopper->setName($name);
-        $shopper->setEmail('php-docdatapayments@verkoyen.eu');
+        $shopper->setEmail('john@doe.com');
         $shopper->setLanguage(new Type\Language('nl'));
 
         $totalGrossAmount = new Type\Amount(2000);
 
         $address = new Type\Address();
-        $address->setStreet('Kerkstraat');
-        $address->setHouseNumber(108);
-        $address->setPostalCode('9050');
-        $address->setCity('Gentbrugge');
+        $address->setStreet('Coolsingel');
+        $address->setHouseNumber(1);
+        $address->setPostalCode('3020AB');
+        $address->setCity('Rotterdam');
         $address->setCountry(new Type\Country('NL'));
 
         $name = new Type\Name();
@@ -198,7 +198,7 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
         $shopper->setId(1);
         $shopper->setGender('M');
         $shopper->setName($name);
-        $shopper->setEmail('php-docdatapayments@verkoyen.eu');
+        $shopper->setEmail('john@doe.com');
         $shopper->setLanguage(new Type\Language('nl'));
 
         $totalGrossAmount = new Type\Amount(2000);
