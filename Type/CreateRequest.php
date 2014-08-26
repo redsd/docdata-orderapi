@@ -5,15 +5,8 @@ namespace CL\DocData\Component\OrderApi\Type;
 /**
  * @author Tijs Verkoyen <php-docdatapayments@verkoyen.eu>
  */
-class CreateRequest extends AbstractObject
+class CreateRequest extends AbstractRequest
 {
-    /**
-     * Merchant credentials.
-     *
-     * @var Merchant
-     */
-    protected $merchant;
-
     /**
      * Unique merchant reference to this order.
      *
@@ -97,11 +90,6 @@ class CreateRequest extends AbstractObject
     protected $invoice;
 
     /**
-     * @var string
-     */
-    protected $version = '1.1';
-
-    /**
      * @param Destination $billTo
      */
     public function setBillTo(Destination $billTo)
@@ -179,22 +167,6 @@ class CreateRequest extends AbstractObject
     public function getMenuPreferences()
     {
         return $this->menuPreferences;
-    }
-
-    /**
-     * @param Merchant $merchant
-     */
-    public function setMerchant(Merchant $merchant)
-    {
-        $this->merchant = $merchant;
-    }
-
-    /**
-     * @return Merchant
-     */
-    public function getMerchant()
-    {
-        return $this->merchant;
     }
 
     /**

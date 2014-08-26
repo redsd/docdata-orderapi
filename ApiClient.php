@@ -2,6 +2,8 @@
 
 namespace CL\DocData\Component\OrderApi;
 
+use CL\DocData\Component\OrderApi\Type\ApproximateTotals;
+use CL\DocData\Component\OrderApi\Type\PaymentPreferences;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -11,7 +13,7 @@ use Psr\Log\NullLogger;
  */
 class ApiClient
 {
-    const VERSION = '1.1';
+    const VERSION = '1.2';
 
     /**
      * @var Type\Merchant
@@ -29,15 +31,11 @@ class ApiClient
     private $logger;
 
     /**
-     * The timeout
-     *
      * @var int
      */
     private $timeOut = 30;
 
     /**
-     * The user agent
-     *
      * @var string
      */
     private $userAgent;
@@ -64,7 +62,7 @@ class ApiClient
         'destination'             => '\CL\DocData\Component\OrderApi\Type\Destination',
         'error'                   => '\CL\DocData\Component\OrderApi\Type\Error',
         'giftCardPaymentInfo'     => '\CL\DocData\Component\OrderApi\Type\GiftCardPaymentInfo',
-        'iDealPaymentInfo'        => '\CL\DocData\Component\OrderApi\Type\IDealPaymentInfo',
+        'iDealPaymentInfo'        => '\CL\DocData\Component\OrderApi\Type\IdealPaymentInfo',
         'invoice'                 => '\CL\DocData\Component\OrderApi\Type\Invoice',
         'item'                    => '\CL\DocData\Component\OrderApi\Type\Item',
         'language'                => '\CL\DocData\Component\OrderApi\Type\Language',
@@ -86,6 +84,8 @@ class ApiClient
         'refundSuccess'           => '\CL\DocData\Component\OrderApi\Type\RefundSuccess',
         'riskCheck'               => '\CL\DocData\Component\OrderApi\Type\RiskCheck',
         'shopper'                 => '\CL\DocData\Component\OrderApi\Type\Shopper',
+        'startError'              => '\CL\DocData\Component\OrderApi\Type\StartError',
+        'startSuccess'            => '\CL\DocData\Component\OrderApi\Type\StartSuccess',
         'statusError'             => '\CL\DocData\Component\OrderApi\Type\StatusError',
         'statusReport'            => '\CL\DocData\Component\OrderApi\Type\StatusReport',
         'statusSuccess'           => '\CL\DocData\Component\OrderApi\Type\StatusSuccess',
@@ -113,42 +113,17 @@ class ApiClient
     }
 
     /**
-     * Returns the SoapClient instance
-     *
-     * @return \SoapClient
-     */
-    protected function getSoapClient()
-    {
-        // create the client if needed
-        if (!$this->soapClient) {
-            $options = [
-                'trace'              => true,
-                'exceptions'         => true,
-                'connection_timeout' => $this->getTimeout(),
-                'user_agent'         => $this->getUserAgent(),
-                'cache_wsdl'         => $this->test ? WSDL_CACHE_NONE : WSDL_CACHE_BOTH,
-                'classmap'           => $this->classMaps,
-            ];
-
-            $this->soapClient = new \SoapClient($this->getWsdl(), $options);
-        }
-
-        return $this->soapClient;
-    }
-
-    /**
-     * Get the timeout that will be used
-     *
      * @return int
      */
     public function getTimeOut()
     {
-        return (int) $this->timeOut;
+        return $this->timeOut;
     }
 
     /**
-     * Set the timeout
-     * After this time the request will stop. You should handle any errors triggered by this.
+     * Set the timeout.
+     *
+     * After this time the request will stop. You should handle any errors triggered by this yourself.
      *
      * @param int $seconds The timeout in seconds.
      */
@@ -159,8 +134,6 @@ class ApiClient
 
     /**
      * Get the user-agent that will be used.
-     * Our version will be prepended to yours.
-     * It will look like: "PHP DocDataPayments/<version> <your-user-agent>"
      *
      * @return string
      */
@@ -171,8 +144,6 @@ class ApiClient
 
     /**
      * Set the user-agent for you application
-     * It will be appended to ours, the result will look like:
-     * "PHP DocDataPayments/<version> <your-user-agent>"
      *
      * @param string $userAgent Your user-agent, it should look like <app-name>/<app-version>.
      */
@@ -204,16 +175,16 @@ class ApiClient
      * order items, the web menu can make use of this information by displaying
      * a shopping cart.
      *
-     * @param string                       $merchantOrderReference
+     * @param string                       $paymentId
      * @param Type\Shopper                 $shopper
      * @param Type\Amount                  $totalGrossAmount
      * @param Type\Destination             $billTo
      * @param Type\PaymentPreferences|null $paymentPreferences
-     * @param string                       $description
-     * @param string                       $receiptText
-     * @param Type\MenuPreferences         $menuPreferences
-     * @param Type\PaymentRequest          $paymentRequest
-     * @param Type\Invoice                 $invoice
+     * @param string|null                  $description
+     * @param string|null                  $receiptText
+     * @param Type\MenuPreferences|null    $menuPreferences
+     * @param Type\PaymentRequest|null     $paymentRequest
+     * @param Type\Invoice|null            $invoice
      * @param bool|null                    $includeCosts
      *
      * @return Type\CreateSuccess
@@ -221,7 +192,7 @@ class ApiClient
      * @throws \Exception
      */
     public function create(
-        $merchantOrderReference,
+        $paymentId,
         Type\Shopper $shopper,
         Type\Amount $totalGrossAmount,
         Type\Destination $billTo,
@@ -235,7 +206,7 @@ class ApiClient
     ) {
         $request = new Type\CreateRequest();
         $request->setMerchant($this->merchant);
-        $request->setMerchantOrderReference($merchantOrderReference);
+        $request->setMerchantOrderReference($paymentId);
         $request->setShopper($shopper);
         $request->setTotalGrossAmount($totalGrossAmount);
         $request->setBillTo($billTo);
@@ -245,9 +216,10 @@ class ApiClient
         if ($receiptText !== null) {
             $request->setReceiptText($receiptText);
         }
-        if ($paymentPreferences != null) {
-            $request->setPaymentPreferences($paymentPreferences);
+        if ($paymentPreferences === null) {
+            $paymentPreferences = new PaymentPreferences();
         }
+        $request->setPaymentPreferences($paymentPreferences);
         if ($menuPreferences !== null) {
             $request->setMenuPreferences($menuPreferences);
         }
@@ -262,26 +234,60 @@ class ApiClient
         }
 
         // make the call
-        $this->logger->info("Payment create: " . $merchantOrderReference, $request->toArray());
-        $response = $this->getSoapClient()->create($request->toArray());
-        $this->logger->info("Payment create soap request: " . $merchantOrderReference, (array) $this->soapClient->__getLastRequest());
-        $this->logger->info("Payment create soap response: " . $merchantOrderReference, (array) $this->soapClient->__getLastResponse());
+        $this->logger->info("Payment create: " . $paymentId, $request->toArray());
+        $response = $this->soap('create', [$request->toArray()]);
+        $this->logger->info("Payment create soap request: " . $paymentId, (array) $this->soapClient->__getLastRequest());
+        $this->logger->info("Payment create soap response: " . $paymentId, (array) $this->soapClient->__getLastResponse());
 
         // validate response
         if (isset($response->createError)) {
             if ($this->test) {
                 var_dump($this->soapClient->__getLastRequest());
-                var_dump($response->createError);
             }
 
-            $this->logger->error("Payment create: " . $merchantOrderReference, (array) $response->createError->getError()->getExplanation());
+            $this->logger->error("Payment create: " . $paymentId, (array) $response->createError->getError()->getExplanation());
 
-            throw new \Exception(
-                $response->createError->getError()->getExplanation()
-            );
+            throw new \Exception($response->createError->getError()->getExplanation());
         }
 
         return $response->createSuccess;
+    }
+
+    /**
+     * The goal of the start operation is to start payment on an existing order
+     *
+     * @param string                   $orderKey
+     * @param Type\PaymentRequestInput $payment
+     *
+     * @return Type\CreateSuccess
+     *
+     * @throws \Exception
+     */
+    public function start($orderKey, Type\PaymentRequestInput $payment)
+    {
+        $request = new Type\StartRequest();
+        $request->setPaymentOrderKey($orderKey);
+        $request->setMerchant($this->merchant);
+        $request->setPayment($payment);
+
+        // make the call
+        $this->logger->info("Payment start: " . $orderKey, $request->toArray());
+        $response = $this->soap('start', [$request->toArray()]);
+        $this->logger->info("Payment start soap request: " . $orderKey, (array) $this->soapClient->__getLastRequest());
+        $this->logger->info("Payment start soap response: " . $orderKey, (array) $this->soapClient->__getLastResponse());
+
+        // validate response
+        if (isset($response->startError)) {
+            if ($this->test) {
+                var_dump($this->soapClient->__getLastRequest());
+            }
+
+            $this->logger->error("Payment start: " . $orderKey, (array) $response->startError->getError()->getExplanation());
+
+            throw new \Exception($response->startError->getError()->getExplanation());
+        }
+
+        return $response->startSuccess;
     }
 
     /**
@@ -304,7 +310,7 @@ class ApiClient
         // make the call
 
         $this->logger->info("Payment cancel: " . $paymentOrderKey, $request->toArray());
-        $response = $this->getSoapClient()->cancel($request->toArray());
+        $response = $this->soap('cancel', [$request->toArray()]);
         $this->logger->info("Payment cancel soap request: " . $paymentOrderKey, (array) $this->soapClient->__getLastRequest());
         $this->logger->info("Payment cancel soap response: " . $paymentOrderKey, (array) $this->soapClient->__getLastResponse());
 
@@ -312,13 +318,11 @@ class ApiClient
         if (isset($response->cancelError)) {
             if ($this->test) {
                 var_dump($this->soapClient->__getLastRequest());
-                var_dump($response->cancelError);
             }
+
             $this->logger->error("Payment cancel: " . $paymentOrderKey, (array) $response->cancelError->getError()->getExplanation());
 
-            throw new \Exception(
-                $response->cancelError->getError()->getExplanation()
-            );
+            throw new \Exception($response->cancelError->getError()->getExplanation());
         }
 
         return $response->cancelSuccess;
@@ -385,7 +389,7 @@ class ApiClient
         // make the call
 
         $this->logger->info("Payment capture: " . $merchantCaptureReference, (array) $request->toArray());
-        $response = $this->getSoapClient()->capture($request->toArray());
+        $response = $this->soap('capture', [$request->toArray()]);
         $this->logger->info("Payment capture soap request: " . $merchantCaptureReference, (array) $this->soapClient->__getLastRequest());
         $this->logger->info("Payment capture soap response: " . $merchantCaptureReference, (array) $this->soapClient->__getLastResponse());
 
@@ -393,14 +397,11 @@ class ApiClient
         if (isset($response->captureError)) {
             if ($this->test) {
                 var_dump($this->soapClient->__getLastRequest());
-                var_dump($response->captureError);
             }
 
             $this->logger->error("Payment capture: " . $merchantCaptureReference, (array) $response->captureError->getError()->getExplanation());
 
-            throw new \Exception(
-                $response->captureError->getError()->getExplanation()
-            );
+            throw new \Exception($response->captureError->getError()->getExplanation());
         }
 
         return $response->captureSuccess;
@@ -461,7 +462,7 @@ class ApiClient
 
         // make the call
         $this->logger->info("Payment capture: " . $merchantRefundReference, (array) $request->toArray());
-        $response = $this->getSoapClient()->refund($request->toArray());
+        $response = $this->soap('refund', [$request->toArray()]);
         $this->logger->info("Payment capture soap request: " . $merchantRefundReference, (array) $this->soapClient->__getLastRequest());
         $this->logger->info("Payment capture soap response: " . $merchantRefundReference, (array) $this->soapClient->__getLastRequest());
 
@@ -520,7 +521,7 @@ class ApiClient
 
         // make the call
         $this->logger->info("Payment status: " . $paymentOrderKey, $request->toArray());
-        $response = $this->getSoapClient()->status($request->toArray());
+        $response = $this->soap('status', [$request->toArray()]);
         $this->logger->info("Payment status soap request: " . $paymentOrderKey, (array) $this->soapClient->__getLastRequest());
         $this->logger->info("Payment status soap response: " . $paymentOrderKey, (array) $this->soapClient->__getLastRequest());
 
@@ -682,6 +683,7 @@ class ApiClient
             $response->statusSuccess->getReport() != null &&
             $response->statusSuccess->getReport()->getApproximateTotals() != null
         ) {
+            /** @var ApproximateTotals $approximateTotals */
             $approximateTotals = $response->statusSuccess->getReport()->getApproximateTotals();
 
             //Safe Route
@@ -707,5 +709,38 @@ class ApiClient
         }
 
         return Type\PaidLevel::NotPaid;
+    }
+
+    /**
+     * @param string $method
+     * @param array $args
+     *
+     * @return mixed
+     */
+    protected function soap($method, array $args = [])
+    {
+        return call_user_func_array([$this->getSoapClient(), $method], $args);
+    }
+
+    /**
+     * @return \SoapClient
+     */
+    protected function getSoapClient()
+    {
+        // create the client if needed
+        if (!$this->soapClient) {
+            $options = [
+                'trace'              => true,
+                'exceptions'         => true,
+                'connection_timeout' => $this->getTimeout(),
+                'user_agent'         => $this->getUserAgent(),
+                'cache_wsdl'         => $this->test ? WSDL_CACHE_NONE : WSDL_CACHE_BOTH,
+                'classmap'           => $this->classMaps,
+            ];
+
+            $this->soapClient = new \SoapClient($this->getWsdl(), $options);
+        }
+
+        return $this->soapClient;
     }
 }

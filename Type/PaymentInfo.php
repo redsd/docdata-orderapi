@@ -48,7 +48,7 @@ class PaymentInfo extends AbstractObject
     protected $giftCardPaymentInfo;
 
     /**
-     * @var IDealPaymentInfo
+     * @var IdealPaymentInfo
      */
     protected $iDealPaymentInfo;
 
@@ -101,17 +101,17 @@ class PaymentInfo extends AbstractObject
     }
 
     /**
-     * @param IDealPaymentInfo $iDealPaymentInfo
+     * @param IdealPaymentInfo $iDealPaymentInfo
      */
-    public function setIDealPaymentInfo($iDealPaymentInfo)
+    public function setIdealPaymentInfo($iDealPaymentInfo)
     {
         $this->iDealPaymentInfo = $iDealPaymentInfo;
     }
 
     /**
-     * @return IDealPaymentInfo
+     * @return IdealPaymentInfo
      */
-    public function getIDealPaymentInfo()
+    public function getIdealPaymentInfo()
     {
         return $this->iDealPaymentInfo;
     }

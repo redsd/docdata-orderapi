@@ -5,15 +5,8 @@ namespace CL\DocData\Component\OrderApi\Type;
 /**
  * @author Tijs Verkoyen <php-docdatapayments@verkoyen.eu>
  */
-class StartRequest extends AbstractObject
+class StartRequest extends AbstractRequest
 {
-    /**
-     * Merchant credentials.
-     *
-     * @var Merchant
-     */
-    protected $merchant;
-
     /**
      * Payment order key belonging to the order which needs to be canceled.
      *
@@ -39,14 +32,9 @@ class StartRequest extends AbstractObject
     protected $recurringPaymentRequest;
 
     /**
-     * @var string
-     */
-    protected $version = '1.1';
-
-    /**
      * @param PaymentRequest $recurringPaymentRequest
      */
-    public function setRecurringPaymentRequest($recurringPaymentRequest)
+    public function setRecurringPaymentRequest(PaymentRequest $recurringPaymentRequest)
     {
         $this->recurringPaymentRequest = $recurringPaymentRequest;
     }
@@ -60,25 +48,9 @@ class StartRequest extends AbstractObject
     }
 
     /**
-     * @param Merchant $merchant
-     */
-    public function setMerchant($merchant)
-    {
-        $this->merchant = $merchant;
-    }
-
-    /**
-     * @return Merchant
-     */
-    public function getMerchant()
-    {
-        return $this->merchant;
-    }
-
-    /**
      * @param PaymentRequestInput $payment
      */
-    public function setPayment($payment)
+    public function setPayment(PaymentRequestInput $payment)
     {
         $this->payment = $payment;
     }

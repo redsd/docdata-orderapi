@@ -22,7 +22,7 @@ abstract class AbstractObject implements TypeInterface
             if ($value instanceof TypeInterface) {
                 $data = $value->toArray();
             } else {
-                $data = $value;
+                $data = (string) $value;
             }
 
             $return[$name] = $data;

@@ -9,16 +9,16 @@ class PaymentPreferences extends AbstractObject
 {
     /**
      * The profile that is used to select the payment methods that can be used
-     * to pay this order.
+     * to pay this order. Defaults to 'standard', which always has to exist.
      *
      * @var string
      */
-    protected $profile;
+    protected $profile = 'standard';
 
     /**
      * @var int
      */
-    protected $numberOfDaysToPay;
+    protected $numberOfDaysToPay = 5;
 
     /**
      * @var mixed

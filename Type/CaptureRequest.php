@@ -5,15 +5,8 @@ namespace CL\DocData\Component\OrderApi\Type;
 /**
  * @author Tijs Verkoyen <php-docdatapayments@verkoyen.eu>
  */
-class CaptureRequest extends AbstractObject
+class CaptureRequest extends AbstractRequest
 {
-    /**
-     * Merchant's credentials.
-     *
-     * @var Merchant
-     */
-    protected $merchant;
-
     /**
      * Payment id with check digit identifying the payment.
      *
@@ -42,7 +35,7 @@ class CaptureRequest extends AbstractObject
      * this order item's total (gross) amount will be used for this capture's
      * amount and currency.
      *
-     * @var strings
+     * @var string
      */
     protected $itemCode;
 
@@ -75,11 +68,6 @@ class CaptureRequest extends AbstractObject
      * @var string
      */
     protected $requiredCaptureDate;
-
-    /**
-     * @var string
-     */
-    protected $version = '1.1';
 
     /**
      * @param Amount $amount
@@ -146,7 +134,7 @@ class CaptureRequest extends AbstractObject
     }
 
     /**
-     * @param strings $itemCode
+     * @param string $itemCode
      */
     public function setItemCode($itemCode)
     {
@@ -154,27 +142,11 @@ class CaptureRequest extends AbstractObject
     }
 
     /**
-     * @return strings
+     * @return string
      */
     public function getItemCode()
     {
         return $this->itemCode;
-    }
-
-    /**
-     * @param Merchant $merchant
-     */
-    public function setMerchant($merchant)
-    {
-        $this->merchant = $merchant;
-    }
-
-    /**
-     * @return Merchant
-     */
-    public function getMerchant()
-    {
-        return $this->merchant;
     }
 
     /**

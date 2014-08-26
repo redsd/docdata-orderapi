@@ -14,17 +14,14 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->apiClient = new ApiClient('foo', 'bar', true);
+        $this->apiClient = new ApiClient(MERCHANT_NAME, MERCHANT_PASSWORD, true);
     }
 
-    public function testGetTimeOut()
+    public function testSettersGetters()
     {
         $this->apiClient->setTimeOut(5);
         $this->assertEquals(5, $this->apiClient->getTimeOut());
-    }
 
-    public function testGetUserAgent()
-    {
         $this->apiClient->setUserAgent('testing/1.1.0');
         $this->assertEquals('testing/1.1.0', $this->apiClient->getUserAgent());
     }
@@ -178,8 +175,8 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
         $address->setCountry(new Type\Country('NL'));
 
         $name = new Type\Name();
-        $name->setFirst('Tijs');
-        $name->setLast('Verkoyen');
+        $name->setFirst('John');
+        $name->setLast('Doe');
 
         $billTo = new Type\Destination();
         $billTo->setName($name);
@@ -258,7 +255,7 @@ class ApiClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testStatusPaid()
     {
-        $this->markTestSkipped('we can\'t test this without a manually docdata transaction, that has been paid.');
+        $this->markTestSkipped('we can\'t test this without a docdata transaction that has been paid.');
 
         //Please read the manual about the paidLevel
         $paidLevel = $this->apiClient->statusPaid('123ABD');

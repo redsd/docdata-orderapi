@@ -2,6 +2,8 @@
 
 namespace CL\DocData\Component\OrderApi\Type;
 
+use CL\DocData\Component\OrderApi\ApiClient;
+
 /**
  * @author Tijs Verkoyen <php-docdatapayments@verkoyen.eu>
  */
@@ -15,7 +17,7 @@ abstract class AbstractRequest extends AbstractObject
     protected $merchant;
 
     /**
-     * Payment order key belonging to the order which needs to be canceled.
+     * Payment order key belonging to the order which needs to be processed.
      *
      * @var string
      */
@@ -24,7 +26,7 @@ abstract class AbstractRequest extends AbstractObject
     /**
      * @var string
      */
-    protected $version = '1.1';
+    protected $version = ApiClient::VERSION;
 
     /**
      * @param Merchant $merchant

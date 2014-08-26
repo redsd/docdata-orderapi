@@ -5,15 +5,8 @@ namespace CL\DocData\Component\OrderApi\Type;
 /**
  * @author Tijs Verkoyen <php-docdatapayments@verkoyen.eu>
  */
-class RefundRequest extends AbstractObject
+class RefundRequest extends AbstractRequest
 {
-    /**
-     * Merchant's credentials.
-     *
-     * @var Merchant
-     */
-    protected $merchant;
-
     /**
      * Payment id with check digit identifying the payment.
      *
@@ -39,7 +32,7 @@ class RefundRequest extends AbstractObject
      * A code or article number identifying an earlier supplied item. Needs to
      * be unique under the payment order the payment is associated with.
      *
-     * @var strings
+     * @var string
      */
     protected $itemCode;
 
@@ -75,11 +68,6 @@ class RefundRequest extends AbstractObject
      * @var  \CL\DocData\Component\OrderApi\Type\SepaBankAccount
      */
     protected $refundBankAccount;
-
-    /**
-     * @var string
-     */
-    protected $version = '1.1';
 
     /**
      * @param Amount $amount
@@ -130,7 +118,7 @@ class RefundRequest extends AbstractObject
     }
 
     /**
-     * @param strings $itemCode
+     * @param string $itemCode
      */
     public function setItemCode($itemCode)
     {
@@ -138,27 +126,11 @@ class RefundRequest extends AbstractObject
     }
 
     /**
-     * @return strings
+     * @return string
      */
     public function getItemCode()
     {
         return $this->itemCode;
-    }
-
-    /**
-     * @param Merchant $merchant
-     */
-    public function setMerchant($merchant)
-    {
-        $this->merchant = $merchant;
-    }
-
-    /**
-     * @return Merchant
-     */
-    public function getMerchant()
-    {
-        return $this->merchant;
     }
 
     /**
