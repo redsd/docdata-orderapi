@@ -5,7 +5,7 @@ namespace CL\DocData\Component\OrderApi\Type;
 /**
  * @author Tijs Verkoyen <php-docdatapayments@verkoyen.eu>
  */
-class IDealPaymentInfo extends AbstractObject
+class IdealPaymentInfo extends AbstractObject
 {
     /**
      * @var string

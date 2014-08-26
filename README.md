@@ -24,12 +24,12 @@ The Order API component for the DocData library.
 
 This component lets you create orders and track their status through DocData's Order API.
 
-The current supported API version is `1.1`.
+The current supported API version is `1.2`.
 
 
 ## License
 
-This package is dual-licensed; MIT for my own code and BSD for the original library (see the complete license [here](LICENSE)).
+This package is dual-licensed; mostly MIT (my own code) and some BSD (the original library, see the complete license [here](LICENSE)).
 
 
 ## Thanks
