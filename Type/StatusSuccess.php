@@ -8,12 +8,12 @@ namespace CL\DocData\Component\OrderApi\Type;
 class StatusSuccess extends AbstractRequestSuccess
 {
     /**
-     * @var Report
+     * @var StatusReport
      */
     protected $report;
 
     /**
-     * @param Report $report
+     * @param StatusReport $report
      */
     public function setReport($report)
     {
@@ -21,7 +21,7 @@ class StatusSuccess extends AbstractRequestSuccess
     }
 
     /**
-     * @return Report
+     * @return StatusReport
      */
     public function getReport()
     {
