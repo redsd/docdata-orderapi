@@ -506,7 +506,7 @@ class ApiClient
         // make the call
         $response = $this->statusReponse($paymentOrderKey);
 
-        return $response->statusSuccess;
+        return $response->getStatusSuccess();
     }
 
     /**
@@ -514,7 +514,7 @@ class ApiClient
      *
      * @param string $paymentOrderKey
      *
-     * @return mixed
+     * @return StatusResponse
      *
      * @throws \Exception
      */

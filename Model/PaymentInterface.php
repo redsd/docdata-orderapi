@@ -27,7 +27,6 @@ interface PaymentInterface
     const STATUS_AUTHORIZED = 50;
     const STATUS_PAID       = 100;
 
-
     /**
      * Must return a unique number/string
      * Will be used as a reference in DocData and must be unique there too
