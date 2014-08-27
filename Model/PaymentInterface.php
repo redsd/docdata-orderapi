@@ -6,9 +6,25 @@ interface PaymentInterface
 {
     const METHOD_DIRECT_DEBIT = 'SEPA_DIRECT_DEBIT';
 
-    const STATUS_NEW        = 1;
-    const STATUS_STARTED    = 10;
+    // states belonging to a 'NEW' context
+    const STATUS_NEW                   = 1;
+    const STATUS_RISK_CHECK_OK         = 2;
+    const STATUS_RISK_CHECK_FAILED     = 3;
+    const STATUS_AUTHENTICATED         = 4;
+    const STATUS_AUTHENTICATION_FAILED = 5;
+    const STATUS_AUTHENTICATION_ERROR  = 6;
+
+    // states belonging to a 'STARTED' context
+    const STATUS_STARTED              = 10;
+    const STATUS_AUTHORIZATION_FAILED = 11;
+    const STATUS_AUTHORIZATION_ERROR  = 12;
+
+    // states belonging to a 'CANCELLED' context
+    const STATUS_CANCELLED = 50;
+
+    // states belonging to a 'AUTHORIZED/PAID' context
     const STATUS_AUTHORIZED = 100;
+
 
     /**
      * Must return a unique number/string

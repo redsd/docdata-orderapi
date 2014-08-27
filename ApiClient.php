@@ -4,6 +4,7 @@ namespace CL\DocData\Component\OrderApi;
 
 use CL\DocData\Component\OrderApi\Type\ApproximateTotals;
 use CL\DocData\Component\OrderApi\Type\PaymentPreferences;
+use CL\DocData\Component\OrderApi\Type\StatusResponse;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -88,6 +89,7 @@ class ApiClient
         'startSuccess'            => '\CL\DocData\Component\OrderApi\Type\StartSuccess',
         'statusError'             => '\CL\DocData\Component\OrderApi\Type\StatusError',
         'statusReport'            => '\CL\DocData\Component\OrderApi\Type\StatusReport',
+        'statusResponse'          => '\CL\DocData\Component\OrderApi\Type\StatusResponse',
         'statusSuccess'           => '\CL\DocData\Component\OrderApi\Type\StatusSuccess',
         'success'                 => '\CL\DocData\Component\OrderApi\Type\Success',
         'vat'                     => '\CL\DocData\Component\OrderApi\Type\Vat',
@@ -680,14 +682,25 @@ class ApiClient
     {
         $response = $this->statusReponse($paymentOrderKey);
 
-        if (isset($response->statusSuccess) &&
-            $response->statusSuccess->getSuccess() != null &&
-            $response->statusSuccess->getSuccess()->getCode() == 'SUCCESS' &&
-            $response->statusSuccess->getReport() != null &&
-            $response->statusSuccess->getReport()->getApproximateTotals() != null
+        return $this->getPaidLevel($response);
+    }
+
+    /**
+     * @param StatusResponse $response
+     *
+     * @return int
+     */
+    public function getPaidLevel(StatusResponse $response)
+    {
+        $statusSuccess = $response->getStatusSuccess();
+        if ($statusSuccess &&
+            $statusSuccess->getSuccess() != null &&
+            $statusSuccess->getSuccess()->getCode() == 'SUCCESS' &&
+            $statusSuccess->getReport() != null &&
+            $statusSuccess->getReport()->getApproximateTotals() != null
         ) {
             /** @var ApproximateTotals $approximateTotals */
-            $approximateTotals = $response->statusSuccess->getReport()->getApproximateTotals();
+            $approximateTotals = $statusSuccess->getReport()->getApproximateTotals();
 
             //Safe Route
             if (($approximateTotals->getTotalRegistered() == $approximateTotals->getTotalCaptured())) {
