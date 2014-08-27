@@ -21,6 +21,7 @@ interface PaymentInterface
 
     // states belonging to a 'CANCELLED' context
     const STATUS_CANCELLED = 20;
+    const STATUS_CHARGEDBACK = 30;
 
     // states belonging to a 'AUTHORIZED/PAID' context
     const STATUS_AUTHORIZED = 50;
