@@ -94,6 +94,9 @@ class ApiClient
         'visaPaymentInfo'         => '\CL\DocData\Component\OrderApi\Type\VisaPaymentInfo',
     ];
 
+    /**
+     * @var bool
+     */
     private $test = false;
 
     /**
@@ -259,7 +262,7 @@ class ApiClient
      * @param string                   $orderKey
      * @param Type\PaymentRequestInput $payment
      *
-     * @return Type\CreateSuccess
+     * @return Type\StartSuccess
      *
      * @throws \Exception
      */
