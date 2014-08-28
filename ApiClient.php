@@ -546,7 +546,6 @@ class ApiClient
      * @param string $defaultAct           If a default payment method is declared to direct the shopper
      *                                     to that payment method in the payment menu. Can contain the
      *                                     values “yes” or “no”.
-     * @param bool   $production           Production mode?
      *
      * @return string
      */
@@ -558,8 +557,7 @@ class ApiClient
         $pendingUrl = null,
         $errorUrl = null,
         $defaultPaymentMethod = null,
-        $defaultAct = null,
-        $production = true
+        $defaultAct = null
     ) {
         $parameters                        = [];
         $parameters['command']             = 'show_payment_cluster';
@@ -586,10 +584,10 @@ class ApiClient
             $parameters['default_act'] = $defaultAct;
         }
 
-        if ($production) {
-            $base = 'https://secure.docdatapayments.com/ps/menu';
-        } else {
+        if ($this->test) {
             $base = 'https://test.docdatapayments.com/ps/menu';
+        } else {
+            $base = 'https://secure.docdatapayments.com/ps/menu';
         }
 
         // build the url
@@ -613,7 +611,6 @@ class ApiClient
      * @param string $defaultAct           If a default payment method is declared to direct the shopper
      *                                     to that payment method in the payment menu. Can contain the
      *                                     values “yes” or “no”.
-     * @param bool   $production           Production mode?
      */
     public function redirectToPaymentUrl(
         $clientLanguage,
@@ -623,8 +620,7 @@ class ApiClient
         $pendingUrl = null,
         $errorUrl = null,
         $defaultPaymentMethod = null,
-        $defaultAct = null,
-        $production = true
+        $defaultAct = null
     ) {
         // get the url
         $url = $this->getPaymentUrl(
@@ -635,8 +631,7 @@ class ApiClient
             $pendingUrl,
             $errorUrl,
             $defaultPaymentMethod,
-            $defaultAct,
-            $production
+            $defaultAct
         );
 
         $this->logger->info("Redirect to docdata: " . $url);
@@ -708,7 +703,7 @@ class ApiClient
 
     /**
      * @param string $method
-     * @param array $args
+     * @param array  $args
      *
      * @return mixed
      */
