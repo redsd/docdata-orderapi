@@ -5,6 +5,7 @@ namespace CL\DocData\Component\OrderApi;
 use CL\DocData\Component\OrderApi\Type\ApproximateTotals;
 use CL\DocData\Component\OrderApi\Type\PaymentPreferences;
 use CL\DocData\Component\OrderApi\Type\StatusResponse;
+use CL\DocData\Component\OrderApi\Type\StatusSuccess;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -680,19 +681,19 @@ class ApiClient
      */
     public function statusPaid($paymentOrderKey)
     {
-        $response = $this->statusReponse($paymentOrderKey);
+        $response      = $this->statusReponse($paymentOrderKey);
+        $statusSuccess = $response->getStatusSuccess();
 
-        return $this->getPaidLevel($response);
+        return $this->getPaidLevel($statusSuccess);
     }
 
     /**
-     * @param StatusResponse $response
+     * @param StatusSuccess|null $statusSuccess
      *
      * @return int
      */
-    public function getPaidLevel(StatusResponse $response)
+    public function getPaidLevel(StatusSuccess $statusSuccess = null)
     {
-        $statusSuccess = $response->getStatusSuccess();
         if ($statusSuccess &&
             $statusSuccess->getSuccess() != null &&
             $statusSuccess->getSuccess()->getCode() == 'SUCCESS' &&
