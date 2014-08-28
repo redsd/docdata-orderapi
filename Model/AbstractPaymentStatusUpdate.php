@@ -5,7 +5,7 @@ namespace CL\DocData\Component\OrderApi\Model;
 abstract class AbstractPaymentStatusUpdate implements PaymentStatusUpdateInterface
 {
     /**
-     * {@inheritdoc}
+     * @var string|int
      */
     protected $id;
 
@@ -15,7 +15,7 @@ abstract class AbstractPaymentStatusUpdate implements PaymentStatusUpdateInterfa
     protected $payment;
 
     /**
-     * {@inheritdoc}
+     * @var int
      */
     protected $status;
 
@@ -39,7 +39,7 @@ abstract class AbstractPaymentStatusUpdate implements PaymentStatusUpdateInterfa
     ];
 
     /**
-     * {@inheritdoc}
+     * @return int|string
      */
     public function getId()
     {
@@ -47,7 +47,9 @@ abstract class AbstractPaymentStatusUpdate implements PaymentStatusUpdateInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @param PaymentInterface $payment
+     *
+     * @return $this
      */
     public function setPayment(PaymentInterface $payment)
     {
@@ -57,7 +59,7 @@ abstract class AbstractPaymentStatusUpdate implements PaymentStatusUpdateInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @return PaymentInterface
      */
     public function getPayment()
     {
@@ -65,7 +67,11 @@ abstract class AbstractPaymentStatusUpdate implements PaymentStatusUpdateInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @param int $status
+     *
+     * @return $this
+     *
+     * @throws \InvalidArgumentException
      */
     public function setStatus($status)
     {
@@ -83,7 +89,7 @@ abstract class AbstractPaymentStatusUpdate implements PaymentStatusUpdateInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @return int
      */
     public function getStatus()
     {
