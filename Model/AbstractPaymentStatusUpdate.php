@@ -17,7 +17,7 @@ abstract class AbstractPaymentStatusUpdate implements PaymentStatusUpdateInterfa
     /**
      * {@inheritdoc}
      */
-    protected $status ;
+    protected $status;
 
     /**
      * @var array
