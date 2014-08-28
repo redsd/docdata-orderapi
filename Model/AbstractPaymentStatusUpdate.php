@@ -29,7 +29,6 @@ abstract class AbstractPaymentStatusUpdate implements PaymentStatusUpdateInterfa
         PaymentInterface::STATUS_NEW,
         PaymentInterface::STATUS_STARTED,
         PaymentInterface::STATUS_CANCELLED,
-        PaymentInterface::STATUS_AUTHENTICATED,
         PaymentInterface::STATUS_RISK_CHECK_FAILED,
         PaymentInterface::STATUS_RISK_CHECK_OK,
         PaymentInterface::STATUS_AUTHORIZATION_FAILED,
