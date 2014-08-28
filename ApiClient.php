@@ -497,6 +497,8 @@ class ApiClient
      * @param string $paymentOrderKey
      *
      * @return Type\StatusSuccess
+     *
+     * @throws \Exception
      */
     public function status($paymentOrderKey)
     {
@@ -505,47 +507,26 @@ class ApiClient
         $request->setPaymentOrderKey($paymentOrderKey);
 
         // make the call
-        $response = $this->statusReponse($paymentOrderKey);
-
-        return $response->getStatusSuccess();
-    }
-
-    /**
-     * The soap status response of a Payment Order,
-     *
-     * @param string $paymentOrderKey
-     *
-     * @return StatusResponse
-     *
-     * @throws \Exception
-     */
-    public function statusReponse($paymentOrderKey)
-    {
-        $request = new Type\StatusRequest();
-        $request->setMerchant($this->merchant);
-        $request->setPaymentOrderKey($paymentOrderKey);
-
-        // make the call
         $this->logger->info("Payment status: " . $paymentOrderKey, $request->toArray());
+
+        /** @var StatusResponse $response */
         $response = $this->soap('status', [$request->toArray()]);
         $this->logger->info("Payment status soap request: " . $paymentOrderKey, (array) $this->soapClient->__getLastRequest());
         $this->logger->info("Payment status soap response: " . $paymentOrderKey, (array) $this->soapClient->__getLastRequest());
 
         // validate response
-        if (isset($response->statusError)) {
+        if ($response->getStatusError()) {
             if ($this->test) {
                 var_dump($this->soapClient->__getLastRequest());
-                var_dump($response->statusError);
+                var_dump($response->getStatusError());
             }
 
-            $this->logger->error("Payment status: " . $paymentOrderKey, (array) $response->statusError->getError()->getExplanation());
+            $this->logger->error("Payment status: " . $paymentOrderKey, (array) $response->getStatusError()->getError()->getExplanation());
 
-            throw new \Exception(
-                $response->statusError->getError()->getExplanation()
-            );
+            throw new \Exception($response->getStatusError()->getError()->getExplanation());
         }
 
-        return $response;
+        return $response->getStatusSuccess();
     }
 
     /**
@@ -681,10 +662,7 @@ class ApiClient
      */
     public function statusPaid($paymentOrderKey)
     {
-        $response      = $this->statusReponse($paymentOrderKey);
-        $statusSuccess = $response->getStatusSuccess();
-
-        return $this->getPaidLevel($statusSuccess);
+        return $this->getPaidLevel($this->status($paymentOrderKey));
     }
 
     /**
