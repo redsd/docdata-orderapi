@@ -23,9 +23,20 @@ abstract class AbstractPaymentStatusUpdate implements PaymentStatusUpdateInterfa
      * @var array
      */
     private $allowedStatuses = [
+        PaymentInterface::STATUS_AUTHENTICATED,
+        PaymentInterface::STATUS_AUTHENTICATION_ERROR,
+        PaymentInterface::STATUS_AUTHENTICATION_FAILED,
         PaymentInterface::STATUS_NEW,
         PaymentInterface::STATUS_STARTED,
+        PaymentInterface::STATUS_CANCELLED,
+        PaymentInterface::STATUS_AUTHENTICATED,
+        PaymentInterface::STATUS_RISK_CHECK_FAILED,
+        PaymentInterface::STATUS_RISK_CHECK_OK,
+        PaymentInterface::STATUS_AUTHORIZATION_FAILED,
+        PaymentInterface::STATUS_AUTHORIZATION_ERROR,
         PaymentInterface::STATUS_AUTHORIZED,
+        PaymentInterface::STATUS_CHARGEDBACK,
+        PaymentInterface::STATUS_PAID,
     ];
 
     /**
