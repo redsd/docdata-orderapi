@@ -269,12 +269,17 @@ class ApiClient
      *
      * @throws \Exception
      */
-    public function start($orderKey, Type\PaymentRequestInput $payment)
+    public function start($orderKey, Type\PaymentRequestInput $payment = null, Type\PaymentRequest $recurringPaymentRequest = null)
     {
         $request = new Type\StartRequest();
         $request->setPaymentOrderKey($orderKey);
         $request->setMerchant($this->merchant);
-        $request->setPayment($payment);
+        if($payment !== null){
+          $request->setPayment($payment);
+        }
+        if($recurringPaymentRequest !== null){
+          $request->setRecurringPaymentRequest($recurringPaymentRequest);
+        }
 
         // make the call
         $this->logger->info("Payment start: " . $orderKey, $request->toArray());
